@@ -5,20 +5,26 @@ import { fileURLToPath } from "node:url";
 
 const performCalculations = async () => {
   // Write your code here
+  // get CPU core number
   const cpuCores = os.cpus().length;
   const workerFile = fileURLToPath(
     path.join(import.meta.url, "..", "worker.js")
   );
-  const result = [];
+  const promises = [];
 
   for (let i = 0; i < cpuCores; i++) {
-    const worker = new Worker(workerFile, { workerData: {num: i + 10} });
-    worker.on("error", (err) => console.log(err));
-    worker.on("message", (msg) => {
-      result.push(msg);
+    const worker = new Worker(workerFile, { workerData: i + 10 });
+
+    const promise = new Promise((res, rej) => {
+      worker.on("error", (err) => rej(err));
+      worker.on("message", (msg) => res(msg));
     });
-    // worker.on('exit', () => {})
+
+    promises.push(promise);
   }
+
+  const allSettled = await Promise.allSettled(promises);
+  const result = allSettled.map((promise) => promise.value);
   console.log(result);
 };
 
