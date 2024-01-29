@@ -1,10 +1,12 @@
 import { access, writeFile } from "node:fs/promises";
-import { URL } from "url";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const create = async () => {
   // Write your code here
-  const __dirname = new URL(".", import.meta.url).pathname;
-  const filePath = `${__dirname}files/fresh.txt`;
+  const filePath = fileURLToPath(
+    path.join(import.meta.url, "..", "files", "fresh.txt")
+  );
   const fileContent = "I am fresh and young";
 
   try {
@@ -21,8 +23,8 @@ const create = async () => {
         "File has been created and the content has been written successfully"
       );
     } else {
-        // console log the error besides file missing
-        console.error(err);
+      // console log the error besides file missing
+      console.error(err);
     }
   }
 };

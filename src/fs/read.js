@@ -1,10 +1,11 @@
 import { readFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
-import { URL } from "url";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const read = async () => {
   // Write your code here
-  const file = new URL("./files/fileToRead.txt", import.meta.url).pathname;
+  const file = fileURLToPath(path.join(import.meta.url, "..", "files", "fileToRead.txt"));
 
   try {
     // throw error if path does not exist

@@ -1,18 +1,19 @@
 import { readdir } from "node:fs/promises";
 import { existsSync } from "node:fs";
-import { URL } from "url";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const list = async () => {
   // Write your code here
-  const path = new URL("./files", import.meta.url).pathname;
+  const pathToRead = fileURLToPath(path.join(import.meta.url, "..", "files"));
 
   try {
     // throw error if path does not exist
-    if (!existsSync(path)) {
+    if (!existsSync(pathToRead)) {
       throw new Error("FS operation failed");
     }
 
-    const files = await readdir(path);
+    const files = await readdir(pathToRead);
     console.log(files);
   } catch (err) {
     console.log(err);

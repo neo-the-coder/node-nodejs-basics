@@ -1,12 +1,12 @@
 import { existsSync } from "node:fs";
 import { cp } from "node:fs/promises";
-import { URL } from "url";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const copy = async () => {
   // Write your code here
-  const __dirname = new URL(".", import.meta.url).pathname;
-  const source = `${__dirname}files`;
-  const dest = `${__dirname}files_copy`;
+  const source = fileURLToPath(path.join(import.meta.url, "..", "files"));
+  const dest = fileURLToPath(path.join(import.meta.url, "..", "files_copy"));
 
   try {
     // check if source folder does not exist or destination folder already exists
